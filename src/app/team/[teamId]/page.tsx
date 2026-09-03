@@ -7,6 +7,7 @@ import { buildDefaultLineup } from "@/lib/lineup";
 import { resolveExpiredListings } from "@/lib/marketService";
 import { getOwnTeamInLeague } from "@/lib/leagueService";
 import { buildOpponentMap, earliestKickoff, formatOpponentLabel } from "@/lib/schedule";
+import { computeDefenseStrength, rateMatchup } from "@/lib/matchupStrength";
 import { LineupEditor, type RosterPlayerView } from "@/components/LineupEditor";
 
 export default async function TeamPage({ params }: { params: { teamId: string } }) {
@@ -70,6 +71,7 @@ export default async function TeamPage({ params }: { params: { teamId: string } 
   const games = await prisma.nflGame.findMany({ where: { season: team.league.season, week } });
   const opponentMap = buildOpponentMap(games);
   const lineupLockAt = earliestKickoff(games);
+  const defenseStrength = await computeDefenseStrength(team.league.season, week);
 
   const roster: RosterPlayerView[] = team.roster.map((r) => {
     const gameInfo = opponentMap[r.player.nflTeam];
@@ -83,6 +85,7 @@ export default async function TeamPage({ params }: { params: { teamId: string } 
       onIr: r.onIr,
       opponentLabel: gameInfo ? formatOpponentLabel(gameInfo) : undefined,
       isBye: games.length > 0 && !gameInfo,
+      matchupRating: gameInfo ? rateMatchup(defenseStrength, gameInfo.opponent, r.player.position) : null,
     };
   });
 

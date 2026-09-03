@@ -14,6 +14,7 @@ export type RosterPlayerView = {
   onIr: boolean;
   opponentLabel?: string; // "vs. GB, So 19:00" / "@ GB, So 19:00"
   isBye?: boolean;
+  matchupRating?: "easy" | "hard" | "neutral" | null;
 };
 
 const OFFENSE_SLOTS = ["QB", "RB1", "RB2", "WR1", "WR2", "TE", "FLEX"];
@@ -30,6 +31,15 @@ function PositionBadge({ position }: { position: string }) {
       {position}
     </span>
   );
+}
+
+// Matchup-Ampel: grün = leichter Gegner, rot = schwerer Gegner. Ohne
+// genug Saisondaten (z.B. Saisonstart) zeigen wir gar nichts an, statt zu raten.
+function MatchupDot({ rating }: { rating?: "easy" | "hard" | "neutral" | null }) {
+  if (!rating || rating === "neutral") return null;
+  const color = rating === "easy" ? "bg-field-green-dark" : "bg-field-red-dark";
+  const title = rating === "easy" ? "Leichter Gegner" : "Schwerer Gegner";
+  return <span title={title} className={`inline-block h-2 w-2 shrink-0 rounded-full ${color}`} />;
 }
 
 export function LineupEditor({
@@ -173,6 +183,7 @@ export function LineupEditor({
                 <div className="flex items-center gap-1.5">
                   <PositionBadge position={player.position} />
                   <span className="truncate font-medium text-card-text">{player.name}</span>
+                  <MatchupDot rating={player.matchupRating} />
                 </div>
                 <div className="text-xs text-card-text-secondary">
                   {player.opponentLabel ?? player.nflTeam} · {formatValue(player.marketValue)} Marktwert
