@@ -1,0 +1,27 @@
+import Link from "next/link";
+import { redirect } from "next/navigation";
+import { getCurrentUser } from "@/lib/auth";
+import { AuthForm } from "@/components/AuthForm";
+
+export default async function RegisterPage() {
+  const user = await getCurrentUser();
+  if (user) redirect("/dashboard");
+
+  return (
+    <main className="flex min-h-screen items-center justify-center px-4">
+      <div className="w-full max-w-sm rounded-2xl bg-card p-6 shadow-xl">
+        <h1 className="text-xl font-bold text-card-text">Konto erstellen</h1>
+        <p className="mb-6 mt-1 text-sm text-card-text-secondary">
+          Leg los und gründe oder finde deine Liga.
+        </p>
+        <AuthForm mode="register" />
+        <p className="mt-4 text-center text-sm text-card-text-secondary">
+          Schon ein Konto?{" "}
+          <Link href="/login" className="font-semibold text-play-blue">
+            Einloggen
+          </Link>
+        </p>
+      </div>
+    </main>
+  );
+}

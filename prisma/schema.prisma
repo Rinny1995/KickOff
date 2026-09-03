@@ -1,0 +1,265 @@
+// KickOff – Datenbankschema
+// Geld wird immer als Ganzzahl in Cent gespeichert (BigInt), nie als Kommazahl.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+// ── Nutzer & Ligen ────────────────────────────────────────────
+
+model User {
+  id             String   @id @default(uuid())
+  email          String   @unique
+  passwordHash   String
+  name           String
+  createdAt      DateTime @default(now())
+  teams          Team[]
+  foundedLeagues League[]
+}
+
+model League {
+  id          String   @id @default(uuid())
+  name        String
+  inviteCode  String   @unique @default(cuid())
+  season      Int
+  founder     User     @relation(fields: [founderId], references: [id])
+  founderId   String
+  // "link" (Standard, nur per Einladungslink) | "password" (Link + Kennwort)
+  // "open" (öffentliche Liga-Suche) ist für V1.5/V2 vorgesehen.
+  visibility  String   @default("link")
+  joinPasswordHash String?
+  // Liga-Einstellungen als JSON: Scoring-Gewichte, Startbudget,
+  // Kadergrößen, Prämien – alles pro Liga anpassbar.
+  settings    Json
+  isPaid      Boolean  @default(false) // Feature-Schalter für später
+  createdAt   DateTime @default(now())
+  teams       Team[]
+  listings    Listing[]
+  draft       Draft?
+}
+
+model Team {
+  id        String   @id @default(uuid())
+  name      String
+  budget    BigInt   // Cent
+  user      User     @relation(fields: [userId], references: [id])
+  userId    String
+  league    League   @relation(fields: [leagueId], references: [id])
+  leagueId  String
+  roster    RosterSlot[]
+  bids      Bid[]
+  lineups   Lineup[]
+  results   WeeklyResult[]
+  watchlist WatchlistEntry[]
+  soldListings Listing[] @relation("ListingSeller")
+  draftPicks   DraftPick[]
+
+  @@unique([userId, leagueId])
+}
+
+// ── NFL-Spieler & Stats (kommen über den Daten-Adapter) ──────
+
+model Player {
+  id           String   @id // ID der externen Datenquelle
+  name         String
+  position     Position
+  nflTeam      String
+  marketValue  BigInt   // aktueller Wert in Cent
+  status       String   @default("active") // active, injured, ir, bye
+  rosterSlots  RosterSlot[]
+  listings     Listing[]
+  stats        PlayerGameStats[]
+  valueHistory MarketValueHistory[]
+  watchedBy    WatchlistEntry[]
+  draftPicks   DraftPick[]
+}
+
+enum Position {
+  QB
+  RB
+  WR
+  TE
+  K
+  DEF
+}
+
+model PlayerGameStats {
+  id            String  @id @default(uuid())
+  player        Player  @relation(fields: [playerId], references: [id])
+  playerId      String
+  season        Int
+  week          Int
+  passYards     Int     @default(0)
+  passTds       Int     @default(0)
+  interceptions Int     @default(0)
+  rushYards     Int     @default(0)
+  rushTds       Int     @default(0)
+  recYards      Int     @default(0)
+  recTds        Int     @default(0)
+  receptions    Int     @default(0)
+  fumblesLost   Int     @default(0)
+  // Kicker & Defense
+  fgMade        Int     @default(0)
+  fgMissed      Int     @default(0)
+  xpMade        Int     @default(0)
+  defSacks      Int     @default(0)
+  defInts       Int     @default(0)
+  defTds        Int     @default(0)
+  defPointsAllowed Int  @default(0)
+
+  @@unique([playerId, season, week])
+}
+
+model MarketValueHistory {
+  id       String   @id @default(uuid())
+  player   Player   @relation(fields: [playerId], references: [id])
+  playerId String
+  date     DateTime
+  value    BigInt
+
+  @@unique([playerId, date])
+}
+
+// ── Kader & Aufstellung ──────────────────────────────────────
+
+model RosterSlot {
+  id       String  @id @default(uuid())
+  team     Team    @relation(fields: [teamId], references: [id])
+  teamId   String
+  player   Player  @relation(fields: [playerId], references: [id])
+  playerId String
+  onIr     Boolean @default(false) // belegt einen der 2 IR-Plätze
+  boughtAt BigInt  // Kaufpreis in Cent, für Gewinn/Verlust-Anzeige
+
+  @@unique([teamId, playerId])
+}
+
+model Lineup {
+  id      String @id @default(uuid())
+  team    Team   @relation(fields: [teamId], references: [id])
+  teamId  String
+  season  Int
+  week    Int
+  // Slot-Belegung: { "QB": "playerId", "RB1": ..., "FLEX": ... }
+  slots   Json
+  points  Float  @default(0)
+
+  @@unique([teamId, season, week])
+}
+
+model WeeklyResult {
+  id        String @id @default(uuid())
+  team      Team   @relation(fields: [teamId], references: [id])
+  teamId    String
+  season    Int
+  week      Int
+  points    Float
+  placement Int
+  prize     BigInt @default(0) // Wochenprämie in Cent
+
+  @@unique([teamId, season, week])
+}
+
+// ── Transfermarkt (verdeckte Gebote mit Frist) ───────────────
+
+model Listing {
+  id        String   @id @default(uuid())
+  league    League   @relation(fields: [leagueId], references: [id])
+  leagueId  String
+  player    Player   @relation(fields: [playerId], references: [id])
+  playerId  String
+  // null = Spieler kommt vom "Computer" (freier Markt),
+  // sonst das verkaufende Team
+  sellerTeam   Team?    @relation("ListingSeller", fields: [sellerTeamId], references: [id])
+  sellerTeamId String?
+  minPrice  BigInt
+  deadline  DateTime
+  resolved  Boolean  @default(false)
+  bids      Bid[]
+}
+
+// Beobachtungsliste im Transfermarkt – auch für Spieler, die gerade
+// nicht zum Verkauf stehen.
+model WatchlistEntry {
+  id        String   @id @default(uuid())
+  team      Team     @relation(fields: [teamId], references: [id])
+  teamId    String
+  player    Player   @relation(fields: [playerId], references: [id])
+  playerId  String
+  createdAt DateTime @default(now())
+
+  @@unique([teamId, playerId])
+}
+
+model Bid {
+  id        String   @id @default(uuid())
+  listing   Listing  @relation(fields: [listingId], references: [id])
+  listingId String
+  team      Team     @relation(fields: [teamId], references: [id])
+  teamId    String
+  amount    BigInt
+  createdAt DateTime @default(now())
+  won       Boolean  @default(false)
+
+  @@unique([listingId, teamId]) // ein Gebot pro Team und Angebot
+}
+
+// ── Echter NFL-Spielplan (ligaunabhängig, einmal pro Saison/Woche) ──
+
+model NflGame {
+  id        String   @id @default(uuid())
+  season    Int
+  week      Int
+  homeTeam  String
+  awayTeam  String
+  kickoffAt DateTime
+
+  @@unique([season, week, homeTeam, awayTeam])
+}
+
+// ── Draft ────────────────────────────────────────────────────
+
+model Draft {
+  id        String   @id @default(uuid())
+  league    League   @relation(fields: [leagueId], references: [id])
+  leagueId  String   @unique
+  // Snake-Reihenfolge als Array von Team-IDs, erst gesetzt wenn gestartet
+  order     Json?
+  currentPick Int    @default(0)
+  completed Boolean  @default(false)
+  startedAt DateTime?
+
+  // Terminwahl (siehe SPEZIFIKATION.md "Draft-Terminwahl")
+  // proposedSlots: [{ id: "a"|"b", at: ISO-Datum }] – 1-2 Vorschläge vom Gründer
+  proposedSlots Json    @default("[]")
+  // votes: { [teamId]: "a" | "b" | "none" }
+  votes         Json    @default("{}")
+  scheduledAt   DateTime?
+
+  // Deadline für den aktuell laufenden Pick (60s-Timer)
+  currentPickDeadline DateTime?
+
+  picks DraftPick[]
+}
+
+// Ein einzelner Pick im Draft-Verlauf (auch für den Picks-Ticker).
+model DraftPick {
+  id         String   @id @default(uuid())
+  draft      Draft    @relation(fields: [draftId], references: [id])
+  draftId    String
+  pickNumber Int
+  team       Team     @relation(fields: [teamId], references: [id])
+  teamId     String
+  player     Player   @relation(fields: [playerId], references: [id])
+  playerId   String
+  isAutoPick Boolean  @default(false)
+  pickedAt   DateTime @default(now())
+
+  @@unique([draftId, pickNumber])
+}
