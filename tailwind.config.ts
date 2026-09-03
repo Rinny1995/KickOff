@@ -12,7 +12,7 @@ const config: Config = {
         "navy-muted": "#6E86A8", // inaktive Tabs
         subtitle: "#A9C6E8", // Untertitel in Kopfzeile
         "ball-green": "#7DE0B8", // Budget-Betrag, Akzente auf Navy
-        card: "#F3F8FE", // Inhaltskarten
+        card: "#D6E8FB", // Inhaltskarten – spürbar hellblau, damit weiße Eingabefelder darauf nicht untergehen
         "card-text": "#16233A",
         "card-text-secondary": "#5A6B84",
         "play-blue": "#1E6FD9", // Positions-Badges, Primär-Buttons auf Navy
