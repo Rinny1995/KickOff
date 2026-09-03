@@ -194,7 +194,7 @@ export function DraftRoom({
             <button
               onClick={() => callApi("vote", { choice: "none" })}
               disabled={ownVote === "none"}
-              className="rounded-lg border border-field-red-dark px-3 py-1.5 text-xs font-semibold text-field-red-dark disabled:opacity-50"
+              className="rounded-lg border border-field-red-light px-3 py-1.5 text-xs font-semibold text-field-red-light disabled:opacity-50"
             >
               {ownVote === "none" ? "Du kannst an beiden nicht" : "Ich kann an beiden nicht"}
             </button>
@@ -212,11 +212,11 @@ export function DraftRoom({
           <div className="rounded-2xl bg-card p-5 shadow-xl">
             <h2 className="mb-2 font-semibold text-card-text">Gründer-Optionen</h2>
             {!canStart && (
-              <p className="mb-2 text-sm text-field-yellow-dark">
+              <p className="mb-2 text-sm text-field-yellow-light">
                 Noch nicht genug Teams. Warte auf weitere Beitritte oder wechsle auf Zulosung.
               </p>
             )}
-            {error && <p className="mb-2 text-sm text-field-red-dark">{error}</p>}
+            {error && <p className="mb-2 text-sm text-field-red-light">{error}</p>}
             <div className="flex gap-2">
               <button
                 onClick={() => callApi("start")}

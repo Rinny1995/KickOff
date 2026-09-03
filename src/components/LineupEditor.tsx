@@ -188,17 +188,17 @@ export function LineupEditor({
                 <div className="text-xs text-card-text-secondary">
                   {player.opponentLabel ?? player.nflTeam} · {formatValue(player.marketValue)} Marktwert
                   {player.status === "injured" && (
-                    <span className="ml-1 text-field-red-dark">· verletzt</span>
+                    <span className="ml-1 text-field-red-light">· verletzt</span>
                   )}
                 </div>
                 {player.isBye && (
-                  <p className="mt-0.5 text-xs font-semibold text-field-yellow-dark">
+                  <p className="mt-0.5 text-xs font-semibold text-field-yellow-light">
                     Spielfrei diese Woche – bitte tauschen
                   </p>
                 )}
               </div>
             ) : (
-              <span className="text-sm text-field-yellow-dark">Slot ist nicht besetzt</span>
+              <span className="text-sm text-field-yellow-light">Slot ist nicht besetzt</span>
             )}
           </div>
           {editable && (
@@ -213,7 +213,7 @@ export function LineupEditor({
         </div>
 
         {editable && isSwapping && (
-          <div className="mt-2 rounded-lg bg-navy/5 p-2">
+          <div className="mt-2 rounded-lg bg-black/20 p-2">
             {options.length === 0 ? (
               <p className="px-2 py-1 text-xs text-card-text-secondary">
                 Keine passenden Bankspieler verfügbar.
@@ -224,7 +224,7 @@ export function LineupEditor({
                   key={opt.playerId}
                   type="button"
                   onClick={() => swapIn(slot, opt.playerId)}
-                  className="flex w-full items-center justify-between rounded-lg px-2 py-1.5 text-left text-sm hover:bg-white"
+                  className="flex w-full items-center justify-between rounded-lg px-2 py-1.5 text-left text-sm hover:bg-white/10"
                 >
                   <span className="flex items-center gap-1.5">
                     <PositionBadge position={opt.position} />
@@ -312,9 +312,9 @@ export function LineupEditor({
                     <span className="text-xs text-card-text-secondary">
                       ({p.opponentLabel ?? p.nflTeam}, {formatValue(p.marketValue)})
                     </span>
-                    {p.isBye && <span className="text-xs text-field-yellow-dark">spielfrei</span>}
+                    {p.isBye && <span className="text-xs text-field-yellow-light">spielfrei</span>}
                     {p.status === "injured" && (
-                      <span className="text-xs text-field-red-dark">verletzt</span>
+                      <span className="text-xs text-field-red-light">verletzt</span>
                     )}
                   </div>
                   {editable && (
@@ -323,7 +323,7 @@ export function LineupEditor({
                         <button
                           type="button"
                           onClick={() => moveToIr(p.playerId)}
-                          className="rounded-lg border border-field-red-dark px-2 py-1 text-xs font-semibold text-field-red-dark hover:bg-field-yellow-bg"
+                          className="rounded-lg border border-field-red-light px-2 py-1 text-xs font-semibold text-field-red-light hover:bg-field-yellow-bg hover:text-field-red-dark"
                         >
                           Auf IR
                         </button>
@@ -343,7 +343,7 @@ export function LineupEditor({
                   )}
                 </div>
                 {editable && sellingId === p.playerId && (
-                  <div className="mt-2 flex items-center gap-2 rounded-lg bg-navy/5 p-2">
+                  <div className="mt-2 flex items-center gap-2 rounded-lg bg-black/20 p-2">
                     <span className="text-xs text-card-text-secondary">Mindestpreis</span>
                     <input
                       type="number"
@@ -369,7 +369,7 @@ export function LineupEditor({
             )}
             {irPlayers.length > 0 && (
               <div className="mt-2 border-t border-navy-muted/15 pt-2">
-                <p className="mb-1 text-xs font-semibold text-field-red-dark">
+                <p className="mb-1 text-xs font-semibold text-field-red-light">
                   IR ({irPlayers.length}/{ROSTER_RULES.irSize})
                 </p>
                 {irPlayers.map((p) => (

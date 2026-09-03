@@ -145,7 +145,7 @@ export function BidDialog({
             </div>
 
             <p
-              className={`mb-3 text-sm ${budgetAfter < 0 ? "font-semibold text-field-red-dark" : "text-card-text-secondary"}`}
+              className={`mb-3 text-sm ${budgetAfter < 0 ? "font-semibold text-field-red-light" : "text-card-text-secondary"}`}
             >
               Budget danach: {formatUnits(budgetAfter)}
             </p>

@@ -86,7 +86,7 @@ export default async function DashboardPage() {
                   <span className="text-card-text-secondary">
                     Kader: {team.roster.length} Spieler
                   </span>
-                  <span className="font-semibold text-field-green-dark">{budget} Budget</span>
+                  <span className="font-semibold text-ball-green">{budget} Budget</span>
                 </div>
                 {team.roster.length > 0 ? (
                   <div className="mt-3 flex gap-2">

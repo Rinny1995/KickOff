@@ -12,14 +12,16 @@ const config: Config = {
         "navy-muted": "#6E86A8", // inaktive Tabs
         subtitle: "#A9C6E8", // Untertitel in Kopfzeile
         "ball-green": "#7DE0B8", // Budget-Betrag, Akzente auf Navy
-        card: "#D6E8FB", // Inhaltskarten – spürbar hellblau, damit weiße Eingabefelder darauf nicht untergehen
-        "card-text": "#16233A",
-        "card-text-secondary": "#5A6B84",
+        card: "#0B2545", // Inhaltskarten – tiefes Marineblau
+        "card-text": "#F3F8FE", // hell, damit auf dem dunklen Karten-Hintergrund lesbar
+        "card-text-secondary": "#A9C6E8",
         "play-blue": "#1E6FD9", // Positions-Badges, Primär-Buttons auf Navy
-        "field-green-dark": "#0F6E56", // Funktionsfarbe grün auf Karten
-        "field-red-dark": "#A32D2D", // Funktionsfarbe rot auf Karten
-        "field-yellow-dark": "#854F0B", // Funktionsfarbe gelb auf Karten
+        "field-green-dark": "#0F6E56", // Funktionsfarbe grün – auf hellen Flächen (z.B. gelbe Chips)
+        "field-red-dark": "#A32D2D", // Funktionsfarbe rot – auf hellen Flächen
+        "field-yellow-dark": "#854F0B", // Funktionsfarbe gelb – auf hellen Flächen
         "field-yellow-bg": "#FAEEDA",
+        "field-red-light": "#FF8A80", // Funktionsfarbe rot – direkt auf der (dunklen) Karte
+        "field-yellow-light": "#FCD34D", // Funktionsfarbe gelb – direkt auf der (dunklen) Karte
       },
       fontFamily: {
         sans: ["system-ui", "-apple-system", "Segoe UI", "sans-serif"],

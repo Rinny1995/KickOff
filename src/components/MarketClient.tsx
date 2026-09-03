@@ -188,7 +188,7 @@ export function MarketClient({
                 <div className="flex items-center gap-2">
                   <button
                     onClick={() => toggleWatch(p.id)}
-                    className={watchedIds.has(p.id) ? "text-field-yellow-dark" : "text-navy-muted"}
+                    className={watchedIds.has(p.id) ? "text-field-yellow-light" : "text-navy-muted"}
                     title="Beobachten"
                   >
                     ★
@@ -232,7 +232,7 @@ export function MarketClient({
                 <DeadlineBadge deadline={l.deadline} />
                 <button
                   onClick={() => toggleWatch(l.playerId)}
-                  className={l.watched ? "text-field-yellow-dark" : "text-navy-muted"}
+                  className={l.watched ? "text-field-yellow-light" : "text-navy-muted"}
                   title="Beobachten"
                 >
                   ★
