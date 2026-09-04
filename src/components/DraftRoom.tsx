@@ -63,10 +63,12 @@ const POSITIONS = ["QB", "RB", "WR", "TE", "K", "DEF"];
 export function DraftRoom({
   leagueId,
   minTeams,
+  maxTeams,
   pickTimeSeconds,
 }: {
   leagueId: string;
   minTeams: number;
+  maxTeams: number;
   pickTimeSeconds: number;
 }) {
   const router = useRouter();
@@ -156,8 +158,8 @@ export function DraftRoom({
         <div className="rounded-2xl bg-card p-5 shadow-xl">
           <h2 className="mb-2 font-semibold text-card-text">Draft-Termin</h2>
           <p className="mb-3 text-xs text-card-text-secondary">
-            {state.teamCount} von mind. {minTeams} Teams dabei. Stimmt ab, welcher Termin passt –
-            die finale Entscheidung trifft der Gründer.
+            {state.teamCount} von mind. {minTeams} Teams dabei (max. {maxTeams}). Stimmt ab, welcher
+            Termin passt – die finale Entscheidung trifft der Gründer.
           </p>
 
           {state.proposedSlots.length === 0 && (

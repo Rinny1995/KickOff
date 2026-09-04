@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { LEAGUE_DEFAULTS } from "@/lib/leagueDefaults";
 
 export function NewLeagueForm() {
   const router = useRouter();
@@ -125,7 +126,9 @@ export function NewLeagueForm() {
       </label>
 
       <fieldset className="flex flex-col gap-2">
-        <legend className="mb-1 text-sm text-card-text-secondary">Liga-Start</legend>
+        <legend className="mb-1 text-sm text-card-text-secondary">
+          Liga-Start <span className="text-xs">({LEAGUE_DEFAULTS.maxTeams} Teams max.)</span>
+        </legend>
         <label className="flex cursor-pointer items-start gap-2 rounded-lg border border-navy-muted/30 p-3 text-sm has-[:checked]:border-play-blue has-[:checked]:bg-play-blue/5">
           <input
             type="radio"
@@ -137,7 +140,8 @@ export function NewLeagueForm() {
           <span>
             <span className="block font-semibold text-card-text">Zulosung (Draft überspringen)</span>
             <span className="block text-card-text-secondary">
-              Jedes Team bekommt sofort einen fair zugelosten Kader. Kein Termin nötig.
+              Jedes Team bekommt sofort einen fair zugelosten Kader. Kein Termin nötig, keine
+              Mindest-Teamzahl.
             </span>
           </span>
         </label>
@@ -153,7 +157,7 @@ export function NewLeagueForm() {
             <span className="block font-semibold text-card-text">Snake-Draft</span>
             <span className="block text-card-text-secondary">
               Ihr draftet live zu einem gemeinsamen Termin. Mitspieler stimmen im Draft-Raum ab,
-              du entscheidest final.
+              du entscheidest final. Startet erst ab mindestens {LEAGUE_DEFAULTS.minTeams} Teams.
             </span>
           </span>
         </label>
@@ -184,7 +188,7 @@ export function NewLeagueForm() {
 
       <fieldset className="flex flex-col gap-2">
         <legend className="mb-1 text-sm text-card-text-secondary">Beitritt</legend>
-        <label className="flex cursor-pointer items-center gap-2 text-sm">
+        <label className="flex cursor-pointer items-center gap-2 text-sm text-card-text">
           <input
             type="radio"
             name="visibility"
@@ -193,7 +197,7 @@ export function NewLeagueForm() {
           />
           Nur per Einladungslink (Standard)
         </label>
-        <label className="flex cursor-pointer items-center gap-2 text-sm">
+        <label className="flex cursor-pointer items-center gap-2 text-sm text-card-text">
           <input
             type="radio"
             name="visibility"

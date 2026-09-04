@@ -4,6 +4,7 @@ import { getCurrentUser } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { getOwnTeamInLeague } from "@/lib/leagueService";
 import { tickDraft } from "@/lib/draftService";
+import { LEAGUE_DEFAULTS } from "@/lib/leagueDefaults";
 import { DraftRoom } from "@/components/DraftRoom";
 
 export default async function DraftPage({ params }: { params: { leagueId: string } }) {
@@ -19,7 +20,7 @@ export default async function DraftPage({ params }: { params: { leagueId: string
     where: { id: params.leagueId },
     select: { name: true, settings: true },
   });
-  const settings = league.settings as { minTeams?: number; pickTimeSeconds?: number };
+  const settings = league.settings as { minTeams?: number; maxTeams?: number; pickTimeSeconds?: number };
 
   return (
     <main className="min-h-screen px-4 py-8">
@@ -34,7 +35,8 @@ export default async function DraftPage({ params }: { params: { leagueId: string
 
         <DraftRoom
           leagueId={params.leagueId}
-          minTeams={settings.minTeams ?? 4}
+          minTeams={settings.minTeams ?? LEAGUE_DEFAULTS.minTeams}
+          maxTeams={settings.maxTeams ?? LEAGUE_DEFAULTS.maxTeams}
           pickTimeSeconds={settings.pickTimeSeconds ?? 60}
         />
       </div>
