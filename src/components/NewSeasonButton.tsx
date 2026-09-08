@@ -47,7 +47,7 @@ export function NewSeasonButton({ leagueId, currentSeason }: { leagueId: string;
           <button
             onClick={() => setConfirming(false)}
             disabled={loading}
-            className="rounded-lg border border-navy-muted/30 px-3 py-1.5 font-semibold text-card-text"
+            className="rounded-lg border border-navy-muted/30 px-3 py-1.5 font-semibold text-field-yellow-dark"
           >
             Abbrechen
           </button>

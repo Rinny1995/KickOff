@@ -119,6 +119,31 @@ export async function startNewSeason(leagueId: string, userId: string) {
   return { newSeason };
 }
 
+/**
+ * Löscht eine Liga unwiderruflich – inklusive aller Teams, Kader,
+ * Aufstellungen, Tabellen, Markt-Angebote/Gebote und Draft-Daten aller
+ * Mitspieler, nicht nur der des Gründers. Nur der Gründer darf das.
+ */
+export async function deleteLeague(leagueId: string, userId: string) {
+  const league = await prisma.league.findUniqueOrThrow({ where: { id: leagueId } });
+  if (league.founderId !== userId) {
+    throw new LeagueError("Nur der Gründer kann die Liga löschen");
+  }
+
+  await prisma.$transaction([
+    prisma.draftPick.deleteMany({ where: { team: { leagueId } } }),
+    prisma.bid.deleteMany({ where: { listing: { leagueId } } }),
+    prisma.watchlistEntry.deleteMany({ where: { team: { leagueId } } }),
+    prisma.rosterSlot.deleteMany({ where: { team: { leagueId } } }),
+    prisma.lineup.deleteMany({ where: { team: { leagueId } } }),
+    prisma.weeklyResult.deleteMany({ where: { team: { leagueId } } }),
+    prisma.listing.deleteMany({ where: { leagueId } }),
+    prisma.draft.deleteMany({ where: { leagueId } }),
+    prisma.team.deleteMany({ where: { leagueId } }),
+    prisma.league.delete({ where: { id: leagueId } }),
+  ]);
+}
+
 /** Das eigene Team des Nutzers in dieser Liga, oder null. */
 export async function getOwnTeamInLeague(userId: string, leagueId: string) {
   return prisma.team.findUnique({

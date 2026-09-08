@@ -7,6 +7,7 @@ import { LogoutButton } from "@/components/LogoutButton";
 import { resolveExpiredListings } from "@/lib/marketService";
 import { canStartNewSeason } from "@/lib/nflWeek";
 import { NewSeasonButton } from "@/components/NewSeasonButton";
+import { DeleteLeagueButton } from "@/components/DeleteLeagueButton";
 import { InviteLink } from "@/components/InviteLink";
 import { isAdmin } from "@/lib/admin";
 
@@ -136,6 +137,7 @@ export default async function DashboardPage() {
                     {canStartNewSeason(team.league.season) && (
                       <NewSeasonButton leagueId={team.leagueId} currentSeason={team.league.season} />
                     )}
+                    <DeleteLeagueButton leagueId={team.leagueId} leagueName={team.league.name} />
                   </>
                 )}
               </div>
