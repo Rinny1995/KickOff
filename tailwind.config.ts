@@ -15,6 +15,7 @@ const config: Config = {
         card: "#0B2545", // Inhaltskarten – tiefes Marineblau
         "card-text": "#F3F8FE", // hell, damit auf dem dunklen Karten-Hintergrund lesbar
         "card-text-secondary": "#A9C6E8",
+        "input-text": "#16233A", // dunkel, für Text in Eingabefeldern (heller Hintergrund, unabhängig vom Karten-Farbschema)
         "play-blue": "#1E6FD9", // Positions-Badges, Primär-Buttons auf Navy
         "field-green-dark": "#0F6E56", // Funktionsfarbe grün – auf hellen Flächen (z.B. gelbe Chips)
         "field-red-dark": "#A32D2D", // Funktionsfarbe rot – auf hellen Flächen

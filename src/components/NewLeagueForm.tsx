@@ -71,7 +71,7 @@ export function NewLeagueForm() {
             <input
               readOnly
               value={link}
-              className="flex-1 rounded-lg border border-navy-muted/30 bg-white px-3 py-2 text-sm text-card-text"
+              className="flex-1 rounded-lg border border-navy-muted/30 bg-white px-3 py-2 text-sm text-input-text"
               onFocus={(e) => e.currentTarget.select()}
             />
             <button
@@ -108,7 +108,7 @@ export function NewLeagueForm() {
           maxLength={40}
           value={leagueName}
           onChange={(e) => setLeagueName(e.target.value)}
-          className="rounded-lg border border-navy-muted/30 px-3 py-2 text-card-text focus:border-play-blue focus:outline-none"
+          className="rounded-lg border border-navy-muted/30 px-3 py-2 text-input-text focus:border-play-blue focus:outline-none"
         />
       </label>
 
@@ -121,7 +121,7 @@ export function NewLeagueForm() {
           maxLength={30}
           value={teamName}
           onChange={(e) => setTeamName(e.target.value)}
-          className="rounded-lg border border-navy-muted/30 px-3 py-2 text-card-text focus:border-play-blue focus:outline-none"
+          className="rounded-lg border border-navy-muted/30 px-3 py-2 text-input-text focus:border-play-blue focus:outline-none"
         />
       </label>
 
@@ -170,7 +170,7 @@ export function NewLeagueForm() {
                 required
                 value={slotA}
                 onChange={(e) => setSlotA(e.target.value)}
-                className="rounded-lg border border-navy-muted/30 px-3 py-2 text-sm text-card-text focus:border-play-blue focus:outline-none"
+                className="rounded-lg border border-navy-muted/30 px-3 py-2 text-sm text-input-text focus:border-play-blue focus:outline-none"
               />
             </label>
             <label className="flex flex-col gap-1 text-xs text-card-text-secondary">
@@ -179,7 +179,7 @@ export function NewLeagueForm() {
                 type="datetime-local"
                 value={slotB}
                 onChange={(e) => setSlotB(e.target.value)}
-                className="rounded-lg border border-navy-muted/30 px-3 py-2 text-sm text-card-text focus:border-play-blue focus:outline-none"
+                className="rounded-lg border border-navy-muted/30 px-3 py-2 text-sm text-input-text focus:border-play-blue focus:outline-none"
               />
             </label>
           </div>
@@ -214,7 +214,7 @@ export function NewLeagueForm() {
             minLength={4}
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            className="rounded-lg border border-navy-muted/30 px-3 py-2 text-sm text-card-text focus:border-play-blue focus:outline-none"
+            className="rounded-lg border border-navy-muted/30 px-3 py-2 text-sm text-input-text focus:border-play-blue focus:outline-none"
           />
         )}
       </fieldset>

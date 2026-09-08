@@ -300,7 +300,7 @@ export function DraftRoom({
           placeholder="Spieler suchen…"
           value={query}
           onChange={(e) => setQuery(e.target.value)}
-          className="mb-2 w-full rounded-lg border border-navy-muted/30 px-3 py-2 text-sm text-card-text focus:border-play-blue focus:outline-none"
+          className="mb-2 w-full rounded-lg border border-navy-muted/30 px-3 py-2 text-sm text-input-text focus:border-play-blue focus:outline-none"
         />
         <div className="mb-3 flex flex-wrap gap-1.5">
           <button

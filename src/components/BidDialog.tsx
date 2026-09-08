@@ -129,7 +129,7 @@ export function BidDialog({
               type="number"
               value={amount}
               onChange={(e) => setAmount(Number(e.target.value))}
-              className="mb-2 w-full rounded-lg border border-navy-muted/30 px-3 py-2 text-card-text focus:border-play-blue focus:outline-none"
+              className="mb-2 w-full rounded-lg border border-navy-muted/30 px-3 py-2 text-input-text focus:border-play-blue focus:outline-none"
             />
             <div className="mb-3 flex gap-2">
               {[200_000, 500_000, 1_000_000].map((delta) => (

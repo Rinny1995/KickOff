@@ -49,7 +49,7 @@ export function AuthForm({ mode }: { mode: Mode }) {
             maxLength={40}
             value={name}
             onChange={(e) => setName(e.target.value)}
-            className="rounded-lg border border-navy-muted/30 px-3 py-2 text-card-text focus:border-play-blue focus:outline-none"
+            className="rounded-lg border border-navy-muted/30 px-3 py-2 text-input-text focus:border-play-blue focus:outline-none"
           />
         </label>
       )}
@@ -60,7 +60,7 @@ export function AuthForm({ mode }: { mode: Mode }) {
           required
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          className="rounded-lg border border-navy-muted/30 px-3 py-2 text-card-text focus:border-play-blue focus:outline-none"
+          className="rounded-lg border border-navy-muted/30 px-3 py-2 text-input-text focus:border-play-blue focus:outline-none"
         />
       </label>
       <label className="flex flex-col gap-1 text-sm text-card-text-secondary">
@@ -71,7 +71,7 @@ export function AuthForm({ mode }: { mode: Mode }) {
           minLength={mode === "register" ? 8 : undefined}
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          className="rounded-lg border border-navy-muted/30 px-3 py-2 text-card-text focus:border-play-blue focus:outline-none"
+          className="rounded-lg border border-navy-muted/30 px-3 py-2 text-input-text focus:border-play-blue focus:outline-none"
         />
         {mode === "register" && (
           <span className="text-xs text-card-text-secondary">Mindestens 8 Zeichen</span>

@@ -20,7 +20,7 @@ export function JoinByCodeForm() {
         placeholder="Einladungscode"
         value={code}
         onChange={(e) => setCode(e.target.value)}
-        className="flex-1 rounded-lg border border-navy-muted/30 px-3 py-2 text-sm text-card-text focus:border-play-blue focus:outline-none"
+        className="flex-1 rounded-lg border border-navy-muted/30 px-3 py-2 text-sm text-input-text focus:border-play-blue focus:outline-none"
       />
       <button
         type="submit"

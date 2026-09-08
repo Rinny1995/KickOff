@@ -166,7 +166,7 @@ export function MarketClient({
           placeholder="Spieler suchen…"
           value={query}
           onChange={(e) => setQuery(e.target.value)}
-          className="w-full rounded-lg border border-navy-muted/30 px-3 py-2 text-card-text focus:border-play-blue focus:outline-none"
+          className="w-full rounded-lg border border-navy-muted/30 px-3 py-2 text-input-text focus:border-play-blue focus:outline-none"
         />
         {searching && <p className="mt-2 text-xs text-card-text-secondary">Suche…</p>}
         {results.length > 0 && (

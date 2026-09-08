@@ -51,7 +51,7 @@ export function JoinLeagueForm({
           maxLength={30}
           value={teamName}
           onChange={(e) => setTeamName(e.target.value)}
-          className="rounded-lg border border-navy-muted/30 px-3 py-2 text-card-text focus:border-play-blue focus:outline-none"
+          className="rounded-lg border border-navy-muted/30 px-3 py-2 text-input-text focus:border-play-blue focus:outline-none"
         />
       </label>
 
@@ -63,7 +63,7 @@ export function JoinLeagueForm({
             required
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            className="rounded-lg border border-navy-muted/30 px-3 py-2 text-card-text focus:border-play-blue focus:outline-none"
+            className="rounded-lg border border-navy-muted/30 px-3 py-2 text-input-text focus:border-play-blue focus:outline-none"
           />
         </label>
       )}

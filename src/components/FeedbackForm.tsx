@@ -58,7 +58,7 @@ export function FeedbackForm() {
           rows={5}
           value={message}
           onChange={(e) => setMessage(e.target.value)}
-          className="rounded-lg border border-navy-muted/30 px-3 py-2 text-card-text focus:border-play-blue focus:outline-none"
+          className="rounded-lg border border-navy-muted/30 px-3 py-2 text-input-text focus:border-play-blue focus:outline-none"
         />
       </label>
 

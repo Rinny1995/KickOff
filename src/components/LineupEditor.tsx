@@ -224,7 +224,7 @@ export function LineupEditor({
                   key={opt.playerId}
                   type="button"
                   onClick={() => swapIn(slot, opt.playerId)}
-                  className="flex w-full items-center justify-between rounded-lg px-2 py-1.5 text-left text-sm hover:bg-white/10"
+                  className="flex w-full items-center justify-between rounded-lg px-2 py-1.5 text-left text-sm text-card-text hover:bg-white/10"
                 >
                   <span className="flex items-center gap-1.5">
                     <PositionBadge position={opt.position} />
@@ -349,7 +349,7 @@ export function LineupEditor({
                       type="number"
                       value={sellPrice}
                       onChange={(e) => setSellPrice(e.target.value)}
-                      className="w-28 rounded-lg border border-navy-muted/30 px-2 py-1 text-sm text-card-text focus:border-play-blue focus:outline-none"
+                      className="w-28 rounded-lg border border-navy-muted/30 px-2 py-1 text-sm text-input-text focus:border-play-blue focus:outline-none"
                     />
                     <button
                       type="button"
