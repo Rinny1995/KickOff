@@ -8,6 +8,7 @@ import { resolveExpiredListings } from "@/lib/marketService";
 import { canStartNewSeason } from "@/lib/nflWeek";
 import { NewSeasonButton } from "@/components/NewSeasonButton";
 import { InviteLink } from "@/components/InviteLink";
+import { isAdmin } from "@/lib/admin";
 
 export default async function DashboardPage() {
   const user = await getCurrentUser();
@@ -38,7 +39,17 @@ export default async function DashboardPage() {
             <p className="text-sm text-subtitle">Willkommen zurück,</p>
             <h1 className="text-xl font-bold text-white">{user.name}</h1>
           </div>
-          <LogoutButton />
+          <div className="flex items-center gap-3">
+            <Link href="/feedback" className="text-sm text-subtitle underline">
+              Feedback
+            </Link>
+            {isAdmin(user) && (
+              <Link href="/admin" className="text-sm text-subtitle underline">
+                Admin
+              </Link>
+            )}
+            <LogoutButton />
+          </div>
         </header>
 
         <div className="flex flex-col gap-3 rounded-2xl bg-card p-5 shadow-xl">

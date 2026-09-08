@@ -21,6 +21,17 @@ model User {
   createdAt      DateTime @default(now())
   teams          Team[]
   foundedLeagues League[]
+  feedback       Feedback[]
+}
+
+// Freies Feedback von Nutzern (Playtest-Rückmeldungen), sichtbar nur im
+// Admin-Bereich für den Betreiber (siehe src/lib/admin.ts).
+model Feedback {
+  id        String   @id @default(uuid())
+  user      User     @relation(fields: [userId], references: [id])
+  userId    String
+  message   String
+  createdAt DateTime @default(now())
 }
 
 model League {
