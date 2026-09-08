@@ -202,6 +202,70 @@ export async function createSaleListing(
   });
 }
 
+// Steuert, wie oft und wie viel der "Computer" von sich aus Spieler zum
+// Verkauf anbietet – wie bei Comunio soll der Markt auch ohne Zutun der
+// Mitspieler ab und zu neue Namen zeigen, aber nicht überschwemmt werden.
+const COMPUTER_LISTING_CHANCE = 0.5; // Wahrscheinlichkeit pro Lauf, überhaupt etwas anzubieten
+const COMPUTER_LISTING_MIN = 1;
+const COMPUTER_LISTING_MAX = 2;
+// Angebote kommen bevorzugt aus den wertvolleren, relevanten Spielern statt
+// aus der kompletten Tiefe des Kaders – sonst wirkt der Markt beliebig.
+const COMPUTER_LISTING_POOL_SIZE = 200;
+
+/**
+ * Lässt den "Computer" gelegentlich ein paar freie Spieler zum Verkauf
+ * anbieten, unabhängig von Geboten der Mitspieler. Gedacht für den
+ * täglichen Cron-Job – ein Aufruf pro Liga und Tag reicht.
+ */
+export async function fillComputerListings(leagueId: string): Promise<number> {
+  if (Math.random() > COMPUTER_LISTING_CHANCE) return 0;
+
+  const alreadyListed = await prisma.listing.findMany({
+    where: { leagueId, resolved: false },
+    select: { playerId: true },
+  });
+  const listedIds = new Set(alreadyListed.map((l) => l.playerId));
+
+  const candidates = await prisma.player.findMany({
+    where: {
+      rosterSlots: { none: { team: { leagueId } } },
+      id: { notIn: [...listedIds] },
+    },
+    orderBy: { marketValue: "desc" },
+    take: COMPUTER_LISTING_POOL_SIZE,
+    select: { id: true, marketValue: true },
+  });
+  if (candidates.length === 0) return 0;
+
+  const count = Math.min(
+    candidates.length,
+    COMPUTER_LISTING_MIN + Math.floor(Math.random() * (COMPUTER_LISTING_MAX - COMPUTER_LISTING_MIN + 1))
+  );
+  const picked = shuffle(candidates).slice(0, count);
+
+  const settings = await getLeagueSettings(leagueId);
+  await prisma.listing.createMany({
+    data: picked.map((p) => ({
+      leagueId,
+      playerId: p.id,
+      sellerTeamId: null,
+      minPrice: p.marketValue,
+      deadline: new Date(Date.now() + settings.listingDurationHours * 60 * 60 * 1000),
+    })),
+  });
+
+  return picked.length;
+}
+
+function shuffle<T>(arr: T[]): T[] {
+  const copy = [...arr];
+  for (let i = copy.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [copy[i], copy[j]] = [copy[j], copy[i]];
+  }
+  return copy;
+}
+
 async function getLeagueSettings(leagueId: string) {
   const league = await prisma.league.findUniqueOrThrow({
     where: { id: leagueId },

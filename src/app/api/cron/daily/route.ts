@@ -1,6 +1,8 @@
 import { NextResponse } from "next/server";
+import { prisma } from "@/lib/prisma";
 import { currentNflSeason, currentNflWeek } from "@/lib/nflWeek";
 import { syncSchedule, syncPlayerStatuses, syncWeekStats, syncMarketValues } from "@/lib/nflSync";
+import { fillComputerListings } from "@/lib/marketService";
 
 // Täglicher Cron-Job (siehe vercel.json). Hält Spielplan, Fitness-Status,
 // Wochen-Punkte und Marktwerte für alle Ligen aktuell – ersetzt das manuelle
@@ -57,6 +59,17 @@ export async function GET(request: Request) {
     results.market = "ok";
   } catch (err) {
     results.market = `error: ${(err as Error).message}`;
+  }
+
+  try {
+    const leagues = await prisma.league.findMany({ where: { season }, select: { id: true } });
+    let totalListed = 0;
+    for (const league of leagues) {
+      totalListed += await fillComputerListings(league.id);
+    }
+    results.computerListings = `${totalListed} neue Angebote in ${leagues.length} Liga(en)`;
+  } catch (err) {
+    results.computerListings = `error: ${(err as Error).message}`;
   }
 
   return NextResponse.json({ season, week, results });

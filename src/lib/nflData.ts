@@ -50,12 +50,14 @@ export class SleeperAdapter implements NflDataAdapter {
     const res = await fetch(`${SLEEPER}/players/nfl`);
     const data: Record<string, any> = await res.json();
     return Object.values(data)
-      .filter(p => p.active && FANTASY_POSITIONS.has(p.position))
+      // Ohne echtes NFL-Team (z.B. ungedraftete Camp-Spieler ohne Roster-
+      // Platz) sind für Zulosung/Draft/Markt irrelevant – raus aus dem Pool.
+      .filter(p => p.active && p.team && FANTASY_POSITIONS.has(p.position))
       .map(p => ({
         id: String(p.player_id),
         name: p.full_name ?? `${p.first_name} ${p.last_name}`,
         position: p.position,
-        nflTeam: p.team ?? "FA",
+        nflTeam: p.team,
         status: p.injury_status ? "injured" : "active",
         searchRank: typeof p.search_rank === "number" ? p.search_rank : undefined,
       }));
