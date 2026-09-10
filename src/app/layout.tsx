@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import { ServiceWorkerRegister } from "@/components/ServiceWorkerRegister";
+import { Footer } from "@/components/Footer";
 
 export const metadata: Metadata = {
   title: "KickOff – Fantasy Football League",
@@ -29,6 +30,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="de">
       <body>
         {children}
+        <Footer />
         <ServiceWorkerRegister />
       </body>
     </html>
